@@ -1,12 +1,2 @@
 ### Enviar prompt
-POST https://wild-low-kitty.glitch.me/api/openai
-Content-Type: application/json
-
-{
-  "text": "Hola que tal este es un mensaje para Andres para decirle que mañana habra pichanga",
-  "context": "Debe tener muchisimos emojis",
-  "filters": {
-    "category": "tone",
-    "option": "funny"
-  }
-}
+GET http://localhost:1234/api/openai

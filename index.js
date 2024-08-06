@@ -7,9 +7,25 @@ import cors from 'cors'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT
+const PORT = process.env.PORT ?? 1234
 app.disable('x-powered-by')
-app.use(cors())
+app.use(cors({
+  origin: (origin, callback) => {
+    const ACCEPTED_ORIGINS = [
+      'https://text-helper-ai.vercel.app/'
+    ]
+
+    if (ACCEPTED_ORIGINS.includes(origin)) {
+      return callback(null, true)
+    }
+
+    if (!origin) {
+      return callback(null, true)
+    }
+
+    return callback(new Error('Not allowed by CORS'))
+  }
+}))
 
 const groq = createOpenAI({
   baseURL: 'https://api.groq.com/openai/v1',
@@ -19,32 +35,17 @@ const groq = createOpenAI({
 app.use(express.json())
 
 app.post('/api/openai', async (req, res) => {
-  const { text, context, category, option } = req.body
-
-  if (text.trim() === '') return res.json('')
-  if (option === 'none') return res.json(text)
-
-  const message = `
-    Modifica el siguiente texto según las instrucciones dadas. El resultado debe ser el texto modificado sin explicaciones adicionales. Ten en cuenta el siguiente contexto adicional: ${context}
-
-    Texto original:
-    ${text}
-
-    Categoría: ${category}
-    Opción: ${option}
-
-    Texto modificado:
-  `
+  const { prompt } = req.body
 
   try {
     const { text: result } = await generateText({
       model: groq('llama3-8b-8192'),
-      prompt: message
+      prompt: prompt.trim()
     })
 
     return res.json(result)
-  } catch (error) {
-    return res.status(500).json({ error: 'Error al generar el texto' })
+  } catch {
+    return res.status(500).json({ error: 'Error al procesar la solicitud' })
   }
 })
 
