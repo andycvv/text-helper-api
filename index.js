@@ -48,4 +48,8 @@ app.post('/api/openai', async (req, res) => {
   }
 })
 
+app.get('/api/openai', (req, res) => {
+  res.json({ message: 'Que haces aquí amigo?' })
+})
+
 app.listen(PORT)
