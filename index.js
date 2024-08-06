@@ -12,7 +12,7 @@ app.disable('x-powered-by')
 app.use(cors({
   origin: (origin, callback) => {
     const ACCEPTED_ORIGINS = [
-      'https://text-helper-ai.vercel.app/'
+      'https://text-helper-ai.vercel.app'
     ]
 
     if (ACCEPTED_ORIGINS.includes(origin)) {
