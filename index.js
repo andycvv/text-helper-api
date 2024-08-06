@@ -2,12 +2,14 @@ import express from 'express'
 import { createOpenAI } from '@ai-sdk/openai'
 import { generateText } from 'ai'
 import dotenv from 'dotenv'
+import cors from 'cors'
 
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT
 app.disable('x-powered-by')
+app.use(cors())
 
 const groq = createOpenAI({
   baseURL: 'https://api.groq.com/openai/v1',
@@ -46,6 +48,4 @@ app.post('/api/openai', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`)
-})
+app.listen(PORT)

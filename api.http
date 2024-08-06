@@ -1,5 +1,5 @@
 ### Enviar prompt
-POST http://localhost:1234/api/openai
+POST https://wild-low-kitty.glitch.me/api/openai
 Content-Type: application/json
 
 {
